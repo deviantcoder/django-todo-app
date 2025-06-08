@@ -1,0 +1,64 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<section class="hero-section text-center text-white">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Organize Your Life</h1>
+        <p class="lead mb-5">Manage your tasks efficiently with our simple and powerful to-do application.</p>
+        <div class="d-flex justify-content-center gap-3">
+            {% if user.is_authenticated %}
+                <a href="#" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-list-check me-2"></i>View Tasks
+                </a>
+                <a href="#" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="bi bi-plus-circle me-2"></i>Add New Task
+                </a>
+            {% else %}
+                <div class="container text-center">
+                    <h2 class="mb-4">Ready to boost your productivity?</h2>
+                    <a href="{% url 'users:signup' %}" class="btn btn-info btn-lg rounded-pill">
+                        <i class="bi bi-rocket me-2"></i>Get Started Now
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<section id="features" class="mb-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-5 mb-3">Features</h2>
+            <p class="lead">Explore what makes To-Do out of this world</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="feature-card p-4 rounded-5 h-100">
+                    <div class="feature-icon mb-3 fs-1">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h3>Quick Add</h3>
+                    <p class="text-secondary">Add tasks in seconds with our simple interface. Never forget an important task again.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-card p-4 rounded-5 h-100">
+                    <div class="feature-icon mb-3 fs-1">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h3>Due Dates</h3>
+                    <p class="text-secondary">Set deadlines for your tasks and get reminders so you stay on track with your goals.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-card p-4 rounded-5 h-100">
+                    <div class="feature-icon mb-3 fs-1">
+                        <i class="bi bi-phone"></i>
+                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p class="text-secondary">Access your tasks from anywhere, on any device. Your lists sync automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
