@@ -11,3 +11,104 @@
 .feature-card {
     background-color: #d8e5f8;
 }
+body {
+    background-color: #f5f6f5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.priority-high {
+    border-left: 5px solid #dc3545;
+    background-color: #fff5f5;
+}
+.priority-medium {
+    border-left: 5px solid #fd7e14;
+    background-color: #fff8f0;
+}
+.priority-low {
+    border-left: 5px solid #28a745;
+    background-color: #f4fff4;
+}
+.task-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.category-badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+.sidebar {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    height: calc(100vh - 100px);
+    position: sticky;
+    top: 90px;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+.sidebar form {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+}
+.sidebar .form-control,
+.sidebar .form-select {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+}
+.sidebar .btn-primary {
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-weight: 500;
+}
+.navbar {
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+.list-group-item {
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+@media (max-width: 992px) {
+    .sidebar {
+        position: static;
+        height: auto;
+        margin: 1.5rem 0;
+        max-height: none;
+    }
+
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    .task-card {
+        margin-bottom: 1rem;
+    }
+}
+@media (max-width: 576px) {
+    .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    .task-card {
+        margin-bottom: 0.75rem;
+    }
+    .sidebar {
+        padding: 1rem;
+    }
+}

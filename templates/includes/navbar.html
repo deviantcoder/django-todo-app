@@ -22,10 +22,12 @@
                     <a class="nav-link" href="#">Contact</a>
                 </li>
             </ul>
-            <div class="ms-3">
-                <a href="{% url 'users:login' %}" class="btn btn-outline-light">Login</a>
-            <a href="{% url 'users:signup' %}" class="btn btn-light ms-2">Sign Up</a>
-            </div>
+            {% if not user.is_authenticated %}
+                <div class="ms-3">
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-light">Login</a>
+                    <a href="{% url 'users:signup' %}" class="btn btn-light ms-2">Sign Up</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </nav>
