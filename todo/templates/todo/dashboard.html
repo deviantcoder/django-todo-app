@@ -1,6 +1,8 @@
 {% extends "_base.html" %}
 
 {% load widget_tweaks %}
+{% load humanize %}
+{% load todo_tags %}
 
 {% block title %}
     Dashboard
@@ -41,78 +43,46 @@
                 </div>
             </div>
             <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card task-card priority-high h-100 shadow-lg">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0 fw-medium">Complete project proposal</h5>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
+
+                {% for task in tasks %}
+                    <div class="col-md-6">
+                        <div class="card task-card priority-{{ task.priority }} h-100 shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title mb-0 fw-medium">{{ task.title }}</h5>
+                                    <div class="form-check fs-3">
+                                        <input class="form-check-input" type="checkbox">
+                                    </div>
+                                </div>
+                                <p class="card-text text-muted small">{{ task.description|slice:50 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if task.priority == 'low' %}
+                                        <span class="badge bg-success">Low</span>
+                                    {% elif task.priority == 'medium' %}
+                                        <span class="badge bg-warning">Medium</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">High</span>
+                                    {% endif %}
+                                    {% if task.categories.exists %}
+                                        {% for category in task.categories.all %}
+                                            <span class="badge bg-secondary category-badge">{{ category.name }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">No categories</span>
+                                    {% endif %}
                                 </div>
                             </div>
-                            <p class="card-text text-muted small">Prepare slides and documentation for client meeting</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-danger">High</span>
-                                <span class="badge bg-secondary category-badge">Work</span>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
-                            <small class="text-muted"><i class="bi bi-calendar me-1"></i> Due tomorrow</small>
-                            <div>
-                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+                                <small class="text-muted"><i class="bi bi-calendar me-1"></i> Due: {{ task.due_date|make_aware_datetime|naturaltime }}</small>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card task-card priority-medium h-100 shadow-lg">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0 fw-medium">Grocery shopping</h5>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <p class="card-text text-muted small">Milk, eggs, bread, fruits and vegetables</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-warning text-dark">Medium</span>
-                                <span class="badge bg-success category-badge">Personal</span>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
-                            <small class="text-muted"><i class="bi bi-calendar me-1"></i> Due in 2 days</small>
-                            <div>
-                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card task-card priority-low h-100 shadow-lg">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0 fw-medium">Read new book</h5>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <p class="card-text text-muted small">Atomic Habits by James Clear - Chapter 3</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-success">Low</span>
-                                <span class="badge bg-info text-dark category-badge">Self-Improvement</span>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
-                            <small class="text-muted"><i class="bi bi-calendar me-1"></i> Due next week</small>
-                            <div>
-                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
+
             </div>
             <div class="mt-5">
                 <button class="btn btn-outline-light fw-semibold text-decoration-none" data-bs-toggle="collapse" data-bs-target="#completedTasks">

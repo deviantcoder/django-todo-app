@@ -36,7 +36,7 @@ class Task(models.Model):
         choices=TASK_STATUS.choices,
         default=TASK_STATUS.PENDING
     )
-    category = models.ManyToManyField('Category', related_name='tasks', blank=True)
+    categories = models.ManyToManyField('Category', related_name='tasks', blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)

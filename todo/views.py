@@ -3,6 +3,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TaskForm
+from .models import Task
 
 
 class HomeView(generic.TemplateView):
@@ -21,6 +22,6 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['task_form'] = TaskForm(user=self.request.user)
+        context['tasks'] = self.request.user.tasks.all()
 
         return context
-
