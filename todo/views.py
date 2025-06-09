@@ -24,7 +24,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['task_form'] = TaskForm(user=self.request.user)
-        context['tasks'] = self.request.user.tasks.all()
+        context['tasks'] = self.request.user.tasks.all().select_related('category')
 
         return context
     
@@ -43,10 +43,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
             context = self.get_context_data()
             context['task_form'] = form
 
-            print(f"Form errors: {form.errors}")
-
-            for errors in form.errors.values():
-                for error in errors:
-                    messages.warning(request, f'{error}.')
+            for error in form.non_field_errors():
+                messages.warning(request, error)
 
             return self.render_to_response(context)
