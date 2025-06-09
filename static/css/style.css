@@ -12,8 +12,7 @@
     background-color: #d8e5f8;
 }
 body {
-    background-color: #f5f6f5;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #c6dded, #a047ae);
 }
 .priority-high {
     border-left: 5px solid #dc3545;
@@ -71,6 +70,9 @@ body {
 .navbar {
     padding: 0.75rem 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: rgba(0, 9, 45, 0.5) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px);
 }
 .navbar-brand {
     font-weight: 600;

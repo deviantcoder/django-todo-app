@@ -1,5 +1,7 @@
 {% extends "_base.html" %}
 
+{% load widget_tweaks %}
+
 {% block title %}
     Dashboard
 {% endblock title %}
@@ -8,28 +10,39 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-lg-8 mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0 fw-semibold">Tasks</h2>
-                <div class="btn-group">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-filter me-1"></i> Filter
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All Tasks</a></li>
-                        <li><a class="dropdown-item" href="#">Today</a></li>
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">High Priority</a></li>
-                        <li><a class="dropdown-item" href="#">Completed</a></li>
-                    </ul>
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="bi bi-sort-alpha-down me-1"></i> Sort
-                    </button>
+            <div class="container-fluid py-3">
+                <div class="row align-items-center g-3">
+                    <div class="col-12 col-md-4">
+                        <h2 class="mb-0 fw-semibold">Tasks</h2>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <form class="d-flex flex-column flex-md-row gap-2 align-items-center justify-content-md-end">
+                            <div class="input-group w-100">
+                                <input class="form-control" type="search" placeholder="Search tasks..." aria-label="Search tasks" id="task-search">
+                                <button class="btn btn-success" type="submit">
+                                    <i class="bi bi-search me-1"></i>Search
+                                </button>
+                            </div>
+                            <div class="dropdown">
+                                <button  class="btn btn-outline-light dropdown-toggle w-100 w-md-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-filter me-1"></i>Filter
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">All Tasks</a></li>
+                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#">This Week</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">High Priority</a></li>
+                                    <li><a class="dropdown-item" href="#">Completed</a></li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="card task-card priority-high h-100">
+                    <div class="card task-card priority-high h-100 shadow-lg">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h5 class="card-title mb-0 fw-medium">Complete project proposal</h5>
@@ -53,7 +66,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card task-card priority-medium h-100">
+                    <div class="card task-card priority-medium h-100 shadow-lg">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h5 class="card-title mb-0 fw-medium">Grocery shopping</h5>
@@ -77,7 +90,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card task-card priority-low h-100">
+                    <div class="card task-card priority-low h-100 shadow-lg">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h5 class="card-title mb-0 fw-medium">Read new book</h5>
@@ -102,13 +115,13 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button class="btn btn-link text-decoration-none" data-bs-toggle="collapse" data-bs-target="#completedTasks">
+                <button class="btn btn-outline-light fw-semibold text-decoration-none" data-bs-toggle="collapse" data-bs-target="#completedTasks">
                     <i class="bi bi-chevron-down me-1"></i> Show Completed Tasks (3)
                 </button>
                 <div class="collapse" id="completedTasks">
                     <div class="row g-4 mt-2">
                         <div class="col-md-6">
-                            <div class="card task-card bg-light h-100">
+                            <div class="card task-card bg-light h-100 shadow-lg">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <h5 class="card-title mb-0 text-decoration-line-through fw-medium">Call mom</h5>
@@ -138,39 +151,29 @@
         <div class="col-lg-4">
             <div class="sidebar">
                 <h4 class="mb-4 fw-semibold"><i class="bi bi-plus-circle me-2"></i> Add New Task</h4>
-                <form>
-                    <div class="mb-3">
-                        <label for="taskTitle" class="form-label fw-medium">Task Title</label>
-                        <input type="text" class="form-control" id="taskTitle" placeholder="What needs to be done?">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3 text-start">
+                        {{ task_form.title|add_label_class:"form-label fw-semibold" }}
+                        {% render_field task_form.title class="form-control" %}
                     </div>
-                    <div class="mb-3">
-                        <label for="taskDescription" class="form-label fw-medium">Description (Optional)</label>
-                        <textarea class="form-control" id="taskDescription" rows="2"></textarea>
+                    <div class="mb-3 text-start">
+                        {{ task_form.description|add_label_class:"form-label fw-semibold" }}
+                        {% render_field task_form.description class="form-control" rows=2 style="max-height: 150px" %}
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="dueDate" class="form-label fw-medium">Due Date</label>
-                            <input type="date" class="form-control" id="dueDate">
+                            {{ task_form.due_date|add_label_class:"form-label fw-semibold" }}
+                            {% render_field task_form.due_date class="form-control" %}
                         </div>
                         <div class="col-md-6">
-                            <label for="taskPriority" class="form-label fw-medium">Priority</label>
-                            <select class="form-select" id="taskPriority">
-                                <option value="low">Low</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="high">High</option>
-                            </select>
+                            {{ task_form.priority|add_label_class:"form-label fw-semibold" }}
+                            {% render_field task_form.priority class="form-select" %}
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label for="taskCategory" class="form-label fw-medium">Category</label>
-                        <select class="form-select" id="taskCategory">
-                            <option value="">Select a category</option>
-                            <option value="work">Work</option>
-                            <option value="personal">Personal</option>
-                            <option value="family">Family</option>
-                            <option value="health">Health</option>
-                            <option value="education">Education</option>
-                        </select>
+                        {{ task_form.category|add_label_class:"form-label fw-semibold" }}
+                        {% render_field task_form.category %}
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mb-4">
                         <i class="bi bi-plus-lg me-1"></i> Add Task

@@ -27,6 +27,8 @@ INSTALLED_APPS = [
 
     # 3rd-party
     'widget_tweaks',
+    'debug_toolbar',
+    'django_htmx',
 
     # projects apps
     'todo.apps.TodoConfig',
@@ -38,9 +40,16 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+
+    # debug toolbar
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 3rd party
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -97,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kyiv'
 
 USE_I18N = True
 
@@ -120,4 +129,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
+LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = '/'
+
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
