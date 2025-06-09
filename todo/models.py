@@ -26,6 +26,7 @@ class Task(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=500, null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
+    
     priority = models.CharField(
         max_length=7,
         choices=TASK_PRIORITY.choices,
@@ -36,7 +37,14 @@ class Task(models.Model):
         choices=TASK_STATUS.choices,
         default=TASK_STATUS.PENDING
     )
-    categories = models.ManyToManyField('Category', related_name='tasks', blank=True)
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.SET_NULL,
+        related_name='tasks',
+        null=True,
+        blank=True
+    )
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     id = models.UUIDField(default=uuid4, unique=True, editable=False, primary_key=True)

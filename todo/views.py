@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from .forms import TaskForm
 from .models import Task
@@ -25,3 +27,26 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         context['tasks'] = self.request.user.tasks.all()
 
         return context
+    
+    def post(self, request, *args, **kwargs):
+        form = TaskForm(request.POST, user=request.user)
+
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+
+            messages.success(request, 'Task created!')
+
+            return redirect('todo:dashboard')
+        else:
+            context = self.get_context_data()
+            context['task_form'] = form
+
+            print(f"Form errors: {form.errors}")
+
+            for errors in form.errors.values():
+                for error in errors:
+                    messages.warning(request, f'{error}.')
+
+            return self.render_to_response(context)

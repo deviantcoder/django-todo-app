@@ -4,9 +4,9 @@ from .models import Task, Category
 
 
 class TaskForm(forms.ModelForm):
-    category = forms.ModelMultipleChoiceField(
+    category = forms.ModelChoiceField(
         queryset=Category.objects.none(),
-        widget=forms.CheckboxSelectMultiple(),
+        widget=forms.RadioSelect(),
         required=False
     )
 
@@ -23,8 +23,11 @@ class TaskForm(forms.ModelForm):
             'due_date': forms.DateInput(attrs={'type': 'date'})
         }
 
-    def __init__(self, *args, user=None, **kwargs):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+
         super().__init__(*args, **kwargs)
+
         self.fields['title'].widget.attrs.update({'placeholder': 'What needs to be done?'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Describe the task.'})
         self.fields['category'].widget.attrs.update({'placeholder': 'Select a category'})
