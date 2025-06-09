@@ -137,3 +137,6 @@ LOGIN_REDIRECT_URL = '/'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
+DEFAULT_CATEGORIES = ('Work', 'Personal', 'Study', 'Other')
