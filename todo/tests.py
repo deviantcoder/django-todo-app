@@ -123,3 +123,11 @@ class DashboardViewTests(BaseTest):
         self.assertContains(response, 'Title cannot be empty')
         self.assertContains(response, 'Due date cannot be in the past')
 
+
+class MarkTaskCompletedViewTests(BaseTest):
+    def setUp(self):
+        super().setUp()
+        self.task = self.create_task(self.user)
+
+    def test_mark_task_completed(self):
+        pass

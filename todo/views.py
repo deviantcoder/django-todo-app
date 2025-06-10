@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
@@ -25,6 +25,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['task_form'] = TaskForm(user=self.request.user)
         context['tasks'] = self.request.user.tasks.all().select_related('category')
+        context['completed_tasks'] = self.request.user.tasks.filter(status=Task.TASK_STATUS.COMPLETED).select_related('category')
 
         return context
     
@@ -47,3 +48,19 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
                 messages.warning(request, error)
 
             return self.render_to_response(context)
+
+
+class MarkTaskCompletedView(LoginRequiredMixin, View):
+    success_url = reverse_lazy('todo:dashboard')
+
+    def post(self, request, *args, **kwargs):
+        task = get_object_or_404(Task, id=kwargs['id'], user=request.user)
+
+        if task.status == Task.TASK_STATUS.COMPLETED:
+            task.mark_pending()
+            messages.warning(request, 'Task completion unchecked')
+        else:
+            task.mark_completed()
+            messages.success(request, 'Task completed!')
+
+        return redirect(self.success_url)

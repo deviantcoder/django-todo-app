@@ -50,11 +50,18 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <h5 class="card-title mb-0 fw-medium">{{ task.title }}</h5>
-                                        <div class="form-check fs-3">
-                                            <input class="form-check-input" type="checkbox">
-                                        </div>
+                                        <form method="post" action="{% url 'todo:mark_task_completed' task.id %}">
+                                            {% csrf_token %}
+                                            <div class="form-check fs-3">
+                                                <input class="form-check-input" type="checkbox" name="completed" onchange="this.form.submit()" {% if task.status == 'completed' %}checked{% endif %}>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <p class="card-text text-muted small">{{ task.description|slice:50 }}</p>
+                                    {% if task.description %}
+                                        <p class="card-text text-muted small">{{ task.description|slice:50 }}</p>
+                                    {% else %}
+                                        <p class="card-text text-muted small">No description</p>
+                                    {% endif %}
                                     <div class="d-flex justify-content-between align-items-center">
                                         {% if task.priority == 'low' %}
                                             <span class="badge bg-success">Low</span>
@@ -194,21 +201,21 @@
                 <hr>
                 <h5 class="mb-3 fw-semibold"><i class="bi bi-clock me-2"></i> Upcoming Deadlines</h5>
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center shadow">
                         <div>
                             <h6 class="mb-1 fw-medium">Complete project proposal</h6>
                             <small class="text-muted">Tomorrow</small>
                         </div>
                         <span class="badge bg-danger rounded-pill">High</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center shadow">
                         <div>
                             <h6 class="mb-1 fw-medium">Grocery shopping</h6>
                             <small class="text-muted">In 2 days</small>
                         </div>
                         <span class="badge bg-warning rounded-pill text-dark">Medium</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center shadow">
                         <div>
                             <h6 class="mb-1 fw-medium">Dentist appointment</h6>
                             <small class="text-muted">In 3 days</small>

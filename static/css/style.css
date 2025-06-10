@@ -17,15 +17,15 @@ body {
     background-attachment: fixed;
 }
 .priority-high {
-    border-left: 5px solid #dc3545;
+    border-left: 7px solid #dc3545;
     background-color: #fff5f5;
 }
 .priority-medium {
-    border-left: 5px solid #fd7e14;
+    border-left: 7px solid #fd7e14;
     background-color: #fff8f0;
 }
 .priority-low {
-    border-left: 5px solid #28a745;
+    border-left: 7px solid #28a745;
     background-color: #f4fff4;
 }
 .task-card {
