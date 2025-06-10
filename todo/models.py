@@ -19,13 +19,14 @@ class Task(models.Model):
         PENDING = ('pending', 'Pending')
         IN_PROGRESS = ('in_progress', 'In progress')
         ON_HOLD = ('on_hold', 'On hold')
-        COMPLETED = ('completed', 'Completed')
-        DELETED = ('deleted', 'Deleted')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=500, null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
+
+    is_completed = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     
     priority = models.CharField(
         max_length=7,
@@ -70,23 +71,23 @@ class Task(models.Model):
     
     def mark_pending(self):
         self.status = self.TASK_STATUS.PENDING
-        self.save()
+        self.save(update_fields=['status'])
 
     def mark_in_progress(self):
         self.status = self.TASK_STATUS.IN_PROGRESS
-        self.save()
+        self.save(update_fields=['status'])
 
     def mark_on_hold(self):
         self.status = self.TASK_STATUS.ON_HOLD
-        self.save()
+        self.save(update_fields=['status'])
 
     def mark_completed(self):
-        self.status = self.TASK_STATUS.COMPLETED
-        self.save()
+        self.is_completed = True
+        self.save(update_fields=['is_completed'])
 
     def mark_deleted(self):
-        self.status = self.TASK_STATUS.DELETED
-        self.save()
+        self.is_deleted = True
+        self.save(update_fields=['is_deleted'])
 
 
 class Category(models.Model):

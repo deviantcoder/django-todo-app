@@ -24,8 +24,8 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['task_form'] = TaskForm(user=self.request.user)
-        context['tasks'] = self.request.user.tasks.all().select_related('category')
-        context['completed_tasks'] = self.request.user.tasks.filter(status=Task.TASK_STATUS.COMPLETED).select_related('category')
+        context['tasks'] = self.request.user.tasks.filter(is_completed=False, is_deleted=False).select_related('category')
+        context['completed_tasks'] = self.request.user.tasks.filter(is_completed=True).select_related('category')
 
         return context
     
@@ -56,8 +56,9 @@ class MarkTaskCompletedView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, id=kwargs['id'], user=request.user)
 
-        if task.status == Task.TASK_STATUS.COMPLETED:
-            task.mark_pending()
+        if task.is_completed:
+            task.is_completed = False
+            task.save(update_fields=['is_completed'])
             messages.warning(request, 'Task completion unchecked')
         else:
             task.mark_completed()
