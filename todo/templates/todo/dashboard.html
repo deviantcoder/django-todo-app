@@ -42,18 +42,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row g-4">
-                {% if tasks %}
-                    {% for task in tasks %}
-                        {% include "todo/includes/task_list_item.html" %}
-                    {% endfor %}
-                {% else %}
-                    <div class="text-center mt-5">
-                        <span class="alert alert-info p-3 rounded-3 border-0">
-                            <i class="bi bi-info-circle me-2"></i> No active tasks yet. Time to get productive!
-                        </span>
-                    </div>
-                {% endif %}
+            <div class="row g-4"
+                id="task-list"
+                hx-get="{% url 'todo:get_task_list' %}"
+                hx-trigger="refresh from:body"
+                hx-swap="innerHTML"
+            >
+                {% include "todo/partials/_task_list.html" %}
             </div>
             <div class="mt-5">
                 <button class="btn btn-outline-light fw-semibold text-decoration-none" data-bs-toggle="collapse" data-bs-target="#completedTasks">
@@ -63,7 +58,7 @@
                     <div class="row g-4 mt-2">
                         {% if completed_tasks %}
                             {% for task in completed_tasks %}
-                                {% include "todo/includes/task_list_item.html" %}
+                                {% include "todo/partials/_task_item.html" %}
                             {% endfor %}
                         {% else %}
                             <div class="text-center mt-5">
@@ -79,44 +74,9 @@
         <div class="col-lg-4">
             <div class="sidebar">
                 <h4 class="mb-4 fw-semibold"><i class="bi bi-plus-circle me-2"></i> Add New Task</h4>
-                <form method="POST" action="{% url 'todo:dashboard' %}">
-                    {% csrf_token %}
-                    <div class="mb-3 text-start">
-                        {{ task_form.title|add_label_class:"form-label fw-semibold" }}
-                        {% render_field task_form.title class="form-control" %}
-                        {% if task_form.title.errors %}
-                            <div class="invalid-feedback d-block">
-                                {{ task_form.title.errors.0 }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-3 text-start">
-                        {{ task_form.description|add_label_class:"form-label fw-semibold" }}
-                        {% render_field task_form.description class="form-control" rows=2 style="max-height: 150px" %}
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            {{ task_form.due_date|add_label_class:"form-label fw-semibold" }}
-                            {% render_field task_form.due_date class="form-control" %}
-                            {% if task_form.due_date.errors %}
-                                <div class="invalid-feedback d-block">
-                                    {{ task_form.due_date.errors.0 }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-6">
-                            {{ task_form.priority|add_label_class:"form-label fw-semibold" }}
-                            {% render_field task_form.priority class="form-select" %}
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        {{ task_form.category|add_label_class:"form-label fw-semibold" }}
-                        {% render_field task_form.category %}
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 mb-4">
-                        <i class="bi bi-plus-lg me-1"></i> Add Task
-                    </button>
-                </form>
+                <div id="task-form-container">
+                    {% include "todo/partials/_task_form.html" %}
+                </div>
                 <hr>
                 <h5 class="mb-3 fw-semibold"><i class="bi bi-clock me-2"></i> Upcoming Deadlines</h5>
                 <div class="list-group">

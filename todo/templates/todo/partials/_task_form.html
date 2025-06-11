@@ -1,0 +1,48 @@
+{% load widget_tweaks %}
+
+{% include "includes/messages.html" %}
+
+<form method="POST"
+    action="{% url 'todo:create_task' %}"
+    hx-post="{% url 'todo:create_task' %}"
+    hx-target="#task-form-container"
+    hx-swap="innerHTML"
+    hx-on::after-request="this.reset(); htmx.trigger('#task-list', 'refresh')"
+    >
+    {% csrf_token %}
+    <div class="mb-3 text-start">
+        {{ task_form.title|add_label_class:"form-label fw-semibold" }}
+        {% render_field task_form.title class="form-control" %}
+        {% if task_form.title.errors %}
+            <div class="invalid-feedback d-block">
+                {{ task_form.title.errors.0 }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb-3 text-start">
+        {{ task_form.description|add_label_class:"form-label fw-semibold" }}
+        {% render_field task_form.description class="form-control" rows=2 style="max-height: 150px" %}
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            {{ task_form.due_date|add_label_class:"form-label fw-semibold" }}
+            {% render_field task_form.due_date class="form-control" %}
+            {% if task_form.due_date.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ task_form.due_date.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            {{ task_form.priority|add_label_class:"form-label fw-semibold" }}
+            {% render_field task_form.priority class="form-select" %}
+        </div>
+    </div>
+    <div class="mb-4">
+        {{ task_form.category|add_label_class:"form-label fw-semibold" }}
+        {% render_field task_form.category %}
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mb-4">
+        <i class="bi bi-plus-lg me-1"></i> Add Task
+    </button>
+</form>
